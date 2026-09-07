@@ -67,6 +67,12 @@ const CLASSIFICATION_LABELS: Partial<Record<EntityType, string>> = {
   [EntityType.MANUFACTURER]: 'Fabricante · Empresa',
 }
 
+// Solo sirven las páginas ya pre-generadas por generateStaticParams en el
+// build (250 vehículos + fabricantes). Cualquier slug fuera de esa lista
+// devuelve 404 directo desde el Worker sin intentar renderizar on-demand
+// (evita gastar CPU del plan free en slugs inválidos o inexistentes).
+export const dynamicParams = false
+
 export async function generateStaticParams() {
   const params: { entityType: string; slug: string }[] = []
 

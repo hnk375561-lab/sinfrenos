@@ -1,11 +1,14 @@
 name = "sinfrenos"
-compatibility_date = "2024-09-01"
-pages_build_output_dir = ".open-next/assets"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[observability]
+enabled = true
 
 [build]
 command = "npm run build:cf"
-
-[vars]
-# Environment variables that are not secrets
-# These will be overridden by Cloudflare Pages dashboard settings
-NEXT_PUBLIC_SITE_URL = "https://sinfreno.com"
