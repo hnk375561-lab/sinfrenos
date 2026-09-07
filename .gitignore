@@ -1,0 +1,53 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# OpenNext Cloudflare build output
+/.open-next/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Carpetas de staging/sourcing - no van en el repo entregable
+/assets-originals/
+/incoming/
+/incoming-images/
+
+# Variantes responsive pregeneradas por
+# scripts/pregenerate-image-variants.mjs (ver next.config.js
+# `images.loaderFile` / src/lib/image-loader.ts). Se regeneran en cada
+# `npm run build` a partir de public/images/entities/**, as�� que no hace
+# falta (ni conviene, por peso) commitearlas.
+/public/images/_optimized/
+
+# Archivos de proceso interno / debug de CI (no son parte del producto)
+/.ci-debug/
+/.trigger-poster-gen

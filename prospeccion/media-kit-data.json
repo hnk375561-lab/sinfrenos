@@ -1,0 +1,55 @@
+{
+  "actualizadoAl": "2026-09-03",
+  "trafico": {
+    "visitasMensuales": "En crecimiento (sitio nuevo, sin ciclo completo de indexación todavía)",
+    "paginasVistasPorVisita": "N/D — completar cuando GA4 tenga 2+ semanas de datos",
+    "fichasPublicadas": 250,
+    "articulosPublicados": 10
+  },
+  "audiencia": {
+    "resumen": "Personas buscando activamente información técnica de autos y motos antes de comprar o vender, mayoría desde Argentina.",
+    "intencion": "Alta intención de compra: llegan buscando datos concretos (ficha técnica, comparación, guía de compra), no contenido de entretenimiento."
+  },
+  "opcionesPublicidad": [
+    {
+      "nombre": "Banner en artículo relevante",
+      "descripcion": "Tu marca en el artículo de guía de compra más relacionado con tu rubro (ej. 'Cómo comprar auto usado' para una concesionaria).",
+      "precioMensualArs": "500 - 800"
+    },
+    {
+      "nombre": "Banner en homepage",
+      "descripcion": "Visibilidad en la página principal del sitio, mayor alcance.",
+      "precioMensualArs": "800 - 1500"
+    },
+    {
+      "nombre": "Mención + link en ficha técnica",
+      "descripcion": "'Consultá disponibilidad en [tu negocio]' en la ficha de vehículos que vendés.",
+      "precioMensualArs": "500 - 1000"
+    },
+    {
+      "nombre": "Ficha destacada (patrocinio de marca/modelo)",
+      "descripcion": "Tu concesionaria como referencia exclusiva de una marca o modelo puntual: aparecés como '¿Buscás este auto? Consultá en [tu negocio]' en esa ficha específica (banner real, no una promesa — se activa en minutos), más los leads de cotización de esa ficha por mail.",
+      "precioMensualArs": "1500 - 3000"
+    },
+    {
+      "nombre": "Leads de cotización compartidos",
+      "descripcion": "Recibís por mail cada persona que pidió cotización de un modelo de tu marca (nombre, teléfono, comentario) — lead calificado, no tráfico frío.",
+      "precioMensualArs": "800 - 2000 (o por lead individual)"
+    },
+    {
+      "nombre": "Leads de venta de usados (trade-in)",
+      "descripcion": "Recibís por mail cada persona que dejó los datos de un auto o moto que quiere vender o entregar como parte de pago — ideal para completar stock de usados sin salir a buscarlo.",
+      "precioMensualArs": "800 - 2000 (o por lead individual)"
+    },
+    {
+      "nombre": "Leads de trámites (transferencia/patentamiento)",
+      "descripcion": "Recibís por mail cada persona que necesita hacer una transferencia, patentamiento u otro trámite vehicular — ideal para gestorías. Producto exclusivo del rubro gestoría del directorio, no compite con concesionarias.",
+      "precioMensualArs": "800 - 2000 (o por lead individual)"
+    }
+  ],
+  "roiEjemplo": "Un lead calificado (alguien que ya comparó specs y decidió que ese es el auto que quiere) vale más que un click frío de red social — está 2-3 pasos más cerca de comprar.",
+  "contacto": {
+    "nombre": "Santiago Ceferino Nehuel Solis",
+    "telefono": "+54 3445 511081"
+  }
+}

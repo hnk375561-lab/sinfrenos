@@ -1,0 +1,121 @@
+import { Suspense } from 'react'
+import type { Metadata } from 'next'
+import { getAllEntities, getEntityCountsByType } from '@/lib/entities'
+import { getEntityImageMap } from '@/lib/media'
+import { getBidirectionalRelationCount } from '@/lib/relations'
+import { SearchClient } from '@/components/search/SearchClient'
+import { Reveal } from '@/components/ui/Reveal'
+import { SearchRowSkeleton, Skeleton } from '@/components/ui/loading'
+import { AdUnit } from '@/components/monetization/AdUnit'
+import { SITE_NAME, SITE_URL } from '@/config/site'
+
+// Antes esta página no definía `alternates`, `openGraph` ni `twitter`, así
+// que heredaba en silencio los del layout raíz: el canonical y el og:url
+// servidos en producción para /buscar apuntaban a la home, no a /buscar
+// (mismo patrón ya usado en /galeria — ver src/app/galeria/page.tsx).
+const TITLE = `Buscar | ${SITE_NAME}`
+const DESCRIPTION = `Busca autos y motos por marca, modelo o segmento en ${SITE_NAME}.`
+
+export const metadata: Metadata = {
+  title: TITLE,
+  description: DESCRIPTION,
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: `${SITE_URL}/buscar` },
+  // Página de resultados de búsqueda: sin contenido indexable único y con
+  // el costo de servidor más alto del sitio (recarga todas las entidades
+  // + conteo de relaciones en cada request). Alineada con /favoritos:
+  // noindex + fuera del sitemap (ver src/app/sitemap.ts).
+  robots: {
+    index: false,
+    follow: true,
+  },
+  openGraph: {
+    type: 'website',
+    title: TITLE,
+    description: DESCRIPTION,
+    url: `${SITE_URL}/buscar`,
+    siteName: SITE_NAME,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+}
+
+export default async function SearchPage({
+  searchParams,
+}: {
+  // Next.js 15: `searchParams` llega como Promise en Server Components.
+  searchParams: Promise<{ q?: string }>
+}) {
+  const [{ q }, entities, counts] = await Promise.all([
+    searchParams,
+    getAllEntities(),
+    getEntityCountsByType(),
+  ])
+
+  // Conteo de conexiones incluyendo relaciones inferidas/bidireccionales
+  // (mismo patrón que `[entityType]/page.tsx`), para habilitar el orden
+  // "Más conexiones" en el buscador global igual que en los listados por
+  // categoría. Se resuelve una sola vez acá, en servidor — `SearchClient`
+  // es `'use client'` y no puede recorrer todo el contenido por su cuenta.
+  const relationCountEntries = await Promise.all(
+    entities.map(async (e) => [`${e.type}/${e.slug}`, await getBidirectionalRelationCount(e)] as const)
+  )
+  const relationCountBySlug = Object.fromEntries(relationCountEntries)
+
+  return (
+    <section className="py-12 sm:py-16">
+      <div className="container-max">
+        <Reveal direction="chapter" className="mb-8">
+        <h1 className="mb-2 font-display text-2xl font-bold text-neutral-900 sm:text-3xl">
+          Buscá <span className="text-gradient-vice">en el expediente</span>
+        </h1>
+        <p className="text-neutral-500">
+          Explorá vehículos, motos, fabricantes y guías documentadas en el catálogo.
+        </p>
+      </Reveal>
+
+        {/* Suspense requerido por `useSearchParams` dentro de SearchClient
+            (sincroniza `?q=`/`?tipo=` con la URL, ver
+            `useSyncedSearchParams`). Esta ruta ya es 100% dinámica (usa
+            `searchParams` server-side arriba), así que no afecta la
+            generación estática — se agrega igual por consistencia y para
+            que una futura navegación cliente entre categorías no bloquee
+            el resto de la página. El fallback reproduce el mismo skeleton
+            que `loading.tsx` (evita una zona de resultados vacía durante
+            la navegación cliente mientras `SearchClient` hidrata) y usa
+            `role="status"` para anunciar el estado a lectores de pantalla,
+            mismo criterio accesible que los loading.tsx de las rutas. */}
+        <Suspense
+          fallback={
+            <div role="status">
+              <span className="sr-only">Buscando…</span>
+              <div className="mx-auto max-w-xl">
+                <Skeleton className="h-12 w-full rounded-xl" />
+                <div className="mt-6 divide-y divide-edge rounded-xl border border-edge bg-surface-card px-3">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <SearchRowSkeleton key={i} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          }
+        >
+          <SearchClient
+            entities={entities}
+            counts={counts}
+            imageBySlug={getEntityImageMap(entities)}
+            relationCountBySlug={relationCountBySlug}
+            initialQuery={q}
+          />
+        </Suspense>
+
+        {/* Monetization: mismo slot real de AdSense reusado en el resto
+            del sitio (ver rankings/page.tsx para el criterio). */}
+        <AdUnit slotId="3119092668" format="responsive" className="mt-12" dataTrackingLabel="ad-buscar" />
+      </div>
+    </section>
+  )
+}
